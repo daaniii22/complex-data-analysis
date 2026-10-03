@@ -4,12 +4,12 @@ annotations_creators:
 language:
 - en
 language_creators:
-- crowdsourced
 - machine-generated
-license: mit
+license:
+- cc-by-sa-4.0
 multilinguality:
 - monolingual
-pretty_name: Multimodal Climate Time Series (2008-2026)
+pretty_name: Multimodal Climate Time Series
 size_categories:
 - n<1K
 source_datasets:
@@ -19,146 +19,92 @@ tags:
 - time-series
 - multimodal
 - nlp
-- causal-inference
+- wikipedia
+- gdelt
 task_categories:
 - feature-extraction
-- time-series-forecasting
+- text-classification
 ---
 
-# Dataset Card: Multimodal Climate Time Series (2008–2026)
+# Multimodal Climate Time Series
 
-## 1. Dataset Summary
-* **Propósito y Contexto:** Este dataset multimodal ha sido desarrollado en el marco de la asignatura *Descubrimiento de Conocimiento en Datos Complejos* (ETSISI - Universidad Politécnica de Madrid). Su objetivo es estudiar la dinámica temporal y las relaciones causales (en sentido de Granger) entre tres dimensiones heterogéneas:
-  1. *Variables Físico-Económicas:* Concentraciones troposféricas de $CO_2$, $CH_4$, $N_2O$, anomalías térmicas globales (NASA GISTEMP), índice oceánico El Niño (ONI) y cotizaciones de futuros del crudo Brent.
-  2. *Atención Mediática Internacional:* Volumen normalizado de cobertura global en prensa digital sobre cambio climático extraído mediante GDELT 2.0 Doc API.
-  3. *Narrativa Pública Colaborativa:* Evolución textual y velocidad de cambio semántico de la entradilla del artículo *Climate change* de Wikipedia en inglés.
-* **Granularidad:** Muestreo semanal estricto (`W-SUN`, domingos) que abarca desde enero de 2008 hasta septiembre de 2026 (977 observaciones continuas).
-* **Justificación Metodológica:** Para la estimación de modelos autorregresivos (VAR) y contrastes de causalidad temporal, se prioriza una serie longitudinal extensa y homogénea de 18+ años equiespaciados frente a un gran volumen no estructurado, evitando la introducción de datos imputados artificialmente.
+## Resumen
 
-## 2. How to use
-El conjunto de datos se distribuye con una partición temporal estricta (80% entrenamiento / 20% prueba) para prevenir la fuga de información hacia el pasado (*look-ahead bias*).
+Este dataset reúne una observación semanal desde 2008 para estudiar la relación temporal entre señales climáticas, económicas, mediáticas y textuales. Cada registro combina medidas numéricas con la entradilla histórica del artículo `Climate change` de Wikipedia en inglés correspondiente a la fecha de referencia.
 
-```python
-from datasets import load_dataset
+El recurso está diseñado para análisis exploratorio, extracción de embeddings, comparación de cambios textuales y modelado temporal. Las relaciones observadas no deben interpretarse como evidencia de causalidad: el dataset no incluye una identificación causal experimental.
 
-# Carga del dataset desde Hugging Face Hub
-dataset = load_dataset("daaniii22/complex-data-analysis")
+## Acceso y localización (FAIR)
 
-# Inspección de las particiones temporales
-print(dataset)
-sample = dataset["train"][0]
-print("Fecha:", sample["timestamp"])
-print("CO2 (ppm):", sample["co2_ppm"])
-print("Extracto de Wikipedia:", sample["text"][:120])
-``` 
+- **Findable:** el Parquet tiene nombres de columnas estables, un `id` global determinista por registro, un esquema documentado y una tarjeta preparada para el repositorio de Hugging Face `daaniii22/complex-data-analysis`.
+- **Accessible:** el artefacto se distribuye como Parquet, un formato abierto y legible con pandas, PyArrow y Hugging Face Datasets. La publicación manual se realiza subiendo `data/raw/dataset_clima_multimodal_fair.parquet`.
+- **Interoperable:** fechas ISO se exponen en `timestamp`, el texto está en `text`, las unidades aparecen en el esquema y el formato columnar conserva los tipos de datos.
+- **Reusable:** el notebook documenta la extracción, la alineación temporal, el linaje, las validaciones y las limitaciones. Deben respetarse las licencias de cada fuente antes de redistribuir el contenido.
 
-## 3. Dataset Details
-### 3.1. Data Structure
+## Esquema
 
-Cada fila corresponde a una observación semanal consolidada con los siguientes campos y metadatos:
+| Campo | Tipo esperado | Descripción y unidad |
+|---|---|---|
+| `id` | string | UUIDv5 determinista basado en artículo, fecha y revisión. |
+| `timestamp` | datetime | Domingo de la semana de referencia. |
+| `text` | string | Entradilla histórica de Wikipedia, en inglés, en wikitext. |
+| `co2_ppm` | float | CO2 semanal de Mauna Loa, partes por millón. |
+| `brent_price` | float | Cierre semanal del futuro Brent, USD. |
+| `temp_anomaly_c` | float | Anomalía mensual GISTEMP, grados Celsius. |
+| `ch4_ppb` | float | Concentración global mensual de metano, partes por billón. |
+| `n2o_ppb` | float | Concentración global mensual de óxido nitroso, partes por billón. |
+| `oni_anomaly` | float | Anomalía ONI de NOAA CPC, grados Celsius. |
+| `media_volume_norm` | float | Volumen relativo normalizado de cobertura de GDELT; puede ser proxy. |
+| `rev_id` | integer | Identificador de revisión de MediaWiki. |
+| `rev_timestamp` | string | Marca temporal ISO 8601 de la revisión. |
+| `rev_size` | integer | Tamaño de la revisión de MediaWiki en bytes. |
+| `source_text` | string | Procedencia de la señal textual. |
+| `source_metrics` | string | Procedencia de las señales numéricas. |
+| `domain` | string | Dominio común del recurso. |
 
-* `id` (`string`): Identificador único universal inmutable (UUIDv4) por registro.
-* `timestamp` (`timestamp[ns]`): Fecha de referencia semanal (domingo).
-* `text` (`string`): Texto íntegro de la entradilla (*lead section*) de Wikipedia vigente en dicha fecha.
-* `co2_ppm` (`float64`): Promedio semanal de concentración de $CO_2$ en Mauna Loa (NOAA GML).
-* `brent_price` (`float64`): Precio de cierre ajustado semanal de los futuros de petróleo Brent en USD (Yahoo Finance).
-* `temp_anomaly_c` (`float64`): Anomalía de temperatura media global superficial (NASA GISTEMP v4).
-* `ch4_ppb` (`float64`): Concentración mensual global de metano en partes por billón (NOAA GML).
-* `n2o_ppb` (`float64`): Concentración mensual global de óxido nitroso en partes por billón (NOAA GML).
-* `oni_anomaly` (`float64`): Índice de anomalía oceánica El Niño/La Niña (NOAA CPC).
-* `media_volume_norm` (`float64`): Volumen relativo normalizado de cobertura en medios (GDELT 2.0).
-* `rev_id` (`int64`): Identificador único numérico de la revisión en MediaWiki.
-* `rev_timestamp` (`string`): Marca temporal ISO 8601 de publicación de la revisión.
-* `source_text` (`string`): Procedencia de la señal textual (`Wikipedia (en)`).
-* `source_metrics` (`string`): Fuentes de las variables numéricas y económicas.
-* `domain` (`string`): Dominio de aplicación (`Climate Change Multimodal Time Series`).
+El artefacto publicado es un único Parquet. No contiene particiones train/test; Hugging Face puede mostrarlo como `train` al cargarlo, pero esa etiqueta no representa una división metodológica. Las divisiones para experimentación deben respetar el orden temporal y crearse fuera del artefacto original.
 
-### 3.2. Data Preview
-Muestra sintética representativa de registros en el corte semanal:
+## Recogida y procesamiento
 
-| timestamp | brent_price | co2_ppm | temp_anomaly_c | media_volume_norm | rev_id | text (fragmento inicial) |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| `2008-01-06` | 94.39 | 385.02 | 0.30 | 0.0000 | 181256649 | `{{protected}}{{featured article}} Global warming is the increase in the average temperature...` |
-| `2016-03-27` | 40.47 | 404.83 | 1.34 | 0.1284 | 711660458 | `Climate change includes both global warming driven by human emissions of greenhouse gases...` |
-| `2026-09-20` | 78.50 | 426.15 | 1.18 | 0.3412 | 1376019004 | `Contemporary climate change includes both global warming caused by humans and its impacts...` |
+El notebook obtiene datos de APIs o repositorios públicos de Wikipedia/MediaWiki, NOAA GML, NOAA CPC, NASA GISTEMP, Yahoo Finance y GDELT. Las series se alinean mediante `merge_asof(direction="backward")` sobre una cuadrícula semanal `W-SUN`. Los datos mensuales se indexan al primer día del mes siguiente para evitar usar una medición mensual antes de su fecha de disponibilidad modelada.
 
-### 3.3. Data Collection
-* **Metodología e Instrumentación:** Pipeline de extracción automatizado mediante llamadas a APIs públicas y repositorios abiertos oficiales:
-  * *Wikipedia:* Ingesta de revisiones históricas retrospectivas (`action=query`, `prop=revisions`, `rvdir=older`, `rvsection=0`) limitadas a la sección de introducción para preservar consistencia estilística y sintáctica.
-  * *NOAA GML & CPC:* Series directas de $CO_2$ semanal en Mauna Loa, medias globales mensuales de $CH_4$ y $N_2O$, e índice trimestral centrado ONI.
-  * *NASA GISS:* Tablas reticulares consolidadas de anomalías térmicas GISTEMP v4.
-  * *Mercados Energéticos:* Contratos continuos de crudo Brent (`BZ=F`) mediante la API de Yahoo Finance.
-  * *Prensa Global:* API de GDELT 2.0 Doc (`timelinevol`) en formato tabular normalizado.
-* **Marco Temporal:** Registro continuo desde el 01/01/2008 hasta el 22/09/2026 (977 semanas).
-* **Control de Muestreo:** Fijación semanal regular a domingos (`W-SUN`) para independizar el índice de festivos y cierres de mercados financieros.
+La revisión de Wikipedia se selecciona con la última revisión disponible hasta cada fecha objetivo. El contenido conserva wikitext para no perder información durante la captura; quien necesite texto limpio debe aplicar un parser y documentar esa transformación.
 
-### 3.4. Data Processing
-* **Tratamiento de Look-Ahead Bias:** Las métricas publicadas de forma mensual consolidada (anomalías térmicas de NASA y concentraciones de gases de NOAA) se indexan con un desfase al primer día del mes siguiente ($M \to M+1$) antes de realizar la unión temporal hacia atrás (`pd.merge_asof(direction='backward')`), garantizando que los datos no estén accesibles al modelo antes de su fecha real de publicación.
-* **Integridad Numérica:** Cobertura exhaustiva con 0 valores nulos (`NaN`) en la totalidad de las 977 observaciones consolidadas.
-* **Procesamiento Textual:** Conservación íntegra de la sintaxis wikitext para permitir la posterior extracción de embeddings densos y métricas de distancia del coseno sobre estados textuales idénticos.
+Si GDELT no responde, el notebook genera una señal proxy basada en la variación de longitud del texto. Esta columna debe inspeccionarse y marcarse como proxy en cualquier análisis que la utilice; no es una medición equivalente de cobertura mediática.
 
-### 3.5. Data Maintenance
-* **Alojamiento y Versionado:** Repositorio en GitHub (`daaniii22/complex-data-analysis`) y Hugging Face Datasets (`daaniii22/complex-data-analysis`).
-* **Autores:** 
-  * Daniel Moraleda Sánchez
-  * Miguel Ángel Morera Hernández
-  * Víctor Pastor López
-  * David Santiago Ruiz
-  * Juan Pablo Asenjo Seoanes
-* **Institución:** Escuela Técnica Superior de Ingeniería de Sistemas Informáticos (ETSISI), Universidad Politécnica de Madrid (UPM).
-* **Política de Actualización:** Dataset congelado para la experimentación académica de la asignatura; ampliable y reproducible mediante el código provisto en el repositorio.
+## Calidad, sesgos y limitaciones
 
-## 4. License
-El código fuente y la consolidación del conjunto de datos se distribuyen bajo la licencia **MIT License**:
+El pipeline comprueba columnas esperadas, unicidad de `id`, orden temporal y saltos semanales distintos de siete días, e informa de los valores nulos sin imputarlos automáticamente. Las fuentes remotas pueden revisar su histórico, por lo que una nueva ejecución no garantiza byte a byte el mismo Parquet.
 
-```text
-MIT License
+El dataset contiene sesgos de cobertura de Wikipedia, prensa digital y fuentes financieras. La disponibilidad del texto no implica representatividad de la opinión pública. El muestreo semanal puede ocultar eventos de corta duración y las distintas frecuencias originales no eliminan la incertidumbre de fecha de publicación. No se deben inferir efectos causales solo a partir de correlaciones o pruebas de Granger.
 
-Copyright (c) 2026 Daniel Moraleda Sánchez, Miguel Ángel Morera Hernández,
-Víctor Pastor López, David Santiago Ruiz, Juan Pablo Asenjo Seoanes
+## Licencia y atribución
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+El código de este repositorio está bajo MIT. La redistribución del dataset debe respetar las licencias y términos de las fuentes:
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+- Wikipedia: CC BY-SA 4.0, con atribución y obligación de compartir bajo la misma licencia las adaptaciones del contenido cubierto por ella.
+- NOAA y NASA: datos públicos del Gobierno de Estados Unidos, sujetos a sus avisos y condiciones de cada producto.
+- GDELT Project: consultar y citar los términos del proyecto antes de reutilizar la señal mediática.
+- Yahoo Finance: consultar sus condiciones de uso y redistribución para los precios de mercado.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+La etiqueta `cc-by-sa-4.0` del front matter describe principalmente el contenido textual reutilizado; no sustituye las condiciones específicas de las demás fuentes.
 
-```
+## Mantenimiento y citación
 
-> **Atribución de fuentes originales:**
-> * Los contenidos textuales extraídos de Wikipedia están sujetos a la licencia **Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)**.
-> * Los registros climáticos de NOAA y NASA pertenecen al dominio público del Gobierno Federal de los Estados Unidos.
-> * Las series temporales de cobertura mediática se consultan bajo los términos de acceso abierto con fines de investigación de GDELT Project.
-
-## 5. Citation
-Formato de citación recomendado para este recurso:
+El dataset se congela para el trabajo académico y se puede regenerar ejecutando `dataset_creation.ipynb`. La fecha de descarga y las versiones de las fuentes deben registrarse cuando se publique una nueva versión en Hugging Face.
 
 ```bibtex
-@dataset{clima_multimodal_upm_2026,
-  author       = {Moraleda Sánchez, Daniel and 
-                  Morera Hernández, Miguel Ángel and 
-                  Pastor López, Víctor and 
-                  Santiago Ruiz, David and 
-                  Asenjo Seoanes, Juan Pablo},
-  title        = {Multimodal Climate Time Series: Physical Signals, Media Coverage and Public Narrative (2008--2026)},
-  year         = {2026},
-  publisher    = {Hugging Face},
-  howpublished = {\url{https://huggingface.co/datasets/daaniii22/complex-data-analysis}}
+@dataset{multimodal_climate_time_series,
+  author    = {Moraleda Sánchez, Daniel and Morera Hernández, Miguel Ángel and
+               Pastor López, Víctor and Santiago Ruiz, David and
+               Asenjo Seoanes, Juan Pablo},
+  title     = {Multimodal Climate Time Series},
+  year      = {2026},
+  publisher = {Hugging Face},
+  url       = {https://huggingface.co/datasets/daaniii22/complex-data-analysis}
 }
 ```
 
-## 6. Acknowledgements
+## Agradecimientos
 
-Agradecimientos al equipo docente de la asignatura Descubrimiento de Conocimiento en Datos Complejos de la Escuela Técnica Superior de Ingeniería de Sistemas Informáticos (UPM), así como a las iniciativas de ciencia abierta y datos públicos de Wikimedia Foundation, NOAA GML, NASA GISS y GDELT Project.
+A las fuentes abiertas y a sus equipos de mantenimiento: Wikimedia Foundation, NOAA GML, NOAA CPC, NASA GISS, GDELT Project y Yahoo Finance, así como al equipo docente de la asignatura Descubrimiento de Conocimiento en Datos Complejos de la ETSISI, Universidad Politécnica de Madrid.

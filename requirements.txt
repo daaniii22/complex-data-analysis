@@ -1,0 +1,7 @@
+pandas>=2.0
+requests>=2.31
+yfinance>=0.2
+tqdm>=4.66
+matplotlib>=3.7
+pyarrow>=14.0
+pathlib>=1.0   
