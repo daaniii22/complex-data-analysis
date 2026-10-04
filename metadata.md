@@ -121,7 +121,7 @@ El dataset se congela para el trabajo académico y se puede regenerar ejecutando
   title     = {Multimodal Climate Time Series: Physical Signals, Media Coverage and Public Narrative (2008--2026)},
   year      = {2026},
   publisher = {Hugging Face},
-  url       = {[https://huggingface.co/datasets/miguel-mxrxra04/multimodal-climate-change-2008-2026](https://huggingface.co/datasets/miguel-mxrxra04/multimodal-climate-change-2008-2026)}
+  url       = {https://huggingface.co/datasets/miguel-mxrxra04/multimodal-climate-change-2008-2026}
 }
 ```
 
