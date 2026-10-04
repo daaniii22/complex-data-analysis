@@ -5,8 +5,7 @@ language:
 - en
 language_creators:
 - machine-generated
-license:
-- cc-by-sa-4.0
+license: mit
 multilinguality:
 - monolingual
 pretty_name: Multimodal Climate Time Series
@@ -26,22 +25,32 @@ task_categories:
 - text-classification
 ---
 
-# Multimodal Climate Time Series
+# Multimodal Climate Time Series (2008–2026)
 
-## Resumen
+## 1. Dataset Summary
 
-Este dataset reúne una observación semanal desde 2008 para estudiar la relación temporal entre señales climáticas, económicas, mediáticas y textuales. Cada registro combina medidas numéricas con la entradilla histórica del artículo `Climate change` de Wikipedia en inglés correspondiente a la fecha de referencia.
+Este dataset reúne una observación semanal continua desde enero de 2008 hasta septiembre de 2026 (977 registros) para estudiar la relación temporal entre señales climáticas, macroeconómicas, mediáticas y narrativas. Cada registro combina mediciones numéricas oficiales con la entradilla histórica del artículo *Climate change* de Wikipedia en inglés correspondiente a la fecha de referencia.
 
-El recurso está diseñado para análisis exploratorio, extracción de embeddings, comparación de cambios textuales y modelado temporal. Las relaciones observadas no deben interpretarse como evidencia de causalidad: el dataset no incluye una identificación causal experimental.
+El recurso está diseñado para análisis exploratorio, extracción de embeddings densos, cuantificación de velocidad semántica y modelado temporal (VAR / Granger). Las relaciones observadas deben evaluarse con rigor metodológico y no interpretarse de forma determinista sin la debida identificación econométrica.
 
-## Acceso y localización (FAIR)
+## 2. How to use
 
-- **Findable:** el Parquet tiene nombres de columnas estables, un `id` global determinista por registro, un esquema documentado y una tarjeta preparada para el repositorio de Hugging Face `daaniii22/complex-data-analysis`.
-- **Accessible:** el artefacto se distribuye como Parquet, un formato abierto y legible con pandas, PyArrow y Hugging Face Datasets. La publicación manual se realiza subiendo `data/raw/dataset_clima_multimodal_fair.parquet`.
-- **Interoperable:** fechas ISO se exponen en `timestamp`, el texto está en `text`, las unidades aparecen en el esquema y el formato columnar conserva los tipos de datos.
-- **Reusable:** el notebook documenta la extracción, la alineación temporal, el linaje, las validaciones y las limitaciones. Deben respetarse las licencias de cada fuente antes de redistribuir el contenido.
+El artefacto se encuentra estructurado en formato Parquet y puede cargarse directamente mediante la librería `datasets` de Hugging Face o con `pandas`:
 
-## Esquema
+```python
+from datasets import load_dataset
+
+# Carga directa del dataset desde Hugging Face Hub
+dataset = load_dataset("miguel-mxrxra04/multimodal-climate-change-2008-2026")
+
+# Inspección de variables
+sample = dataset["train"][0]
+print("Semana:", sample["timestamp"])
+print("CO2 (ppm):", sample["co2_ppm"])
+print("Texto de Wikipedia:", sample["text"][:120])
+```
+## 3. Dataset Details
+###  3.1 Data Structure
 
 | Campo | Tipo esperado | Descripción y unidad |
 |---|---|---|
@@ -64,7 +73,7 @@ El recurso está diseñado para análisis exploratorio, extracción de embedding
 
 El artefacto publicado es un único Parquet. No contiene particiones train/test; Hugging Face puede mostrarlo como `train` al cargarlo, pero esa etiqueta no representa una división metodológica. Las divisiones para experimentación deben respetar el orden temporal y crearse fuera del artefacto original.
 
-## Recogida y procesamiento
+### 3.2 Data Collection
 
 El notebook obtiene datos de APIs o repositorios públicos de Wikipedia/MediaWiki, NOAA GML, NOAA CPC, NASA GISTEMP, Yahoo Finance y GDELT. Las series se alinean mediante `merge_asof(direction="backward")` sobre una cuadrícula semanal `W-SUN`. Los datos mensuales se indexan al primer día del mes siguiente para evitar usar una medición mensual antes de su fecha de disponibilidad modelada.
 
@@ -72,13 +81,22 @@ La revisión de Wikipedia se selecciona con la última revisión disponible hast
 
 Si GDELT no responde, el notebook genera una señal proxy basada en la variación de longitud del texto. Esta columna debe inspeccionarse y marcarse como proxy en cualquier análisis que la utilice; no es una medición equivalente de cobertura mediática.
 
-## Calidad, sesgos y limitaciones
+### 3.3. Data Processing
+El pipeline verifica de forma estricta las columnas esperadas, la unicidad de `id`, el orden temporal y la regularidad semanal de 7 días, notificando valores anómalos sin realizar imputaciones forzadas. 
 
-El pipeline comprueba columnas esperadas, unicidad de `id`, orden temporal y saltos semanales distintos de siete días, e informa de los valores nulos sin imputarlos automáticamente. Las fuentes remotas pueden revisar su histórico, por lo que una nueva ejecución no garantiza byte a byte el mismo Parquet.
+Las fuentes remotas pueden revisar su histórico con el tiempo, por lo que una nueva ejecución del pipeline podría incorporar ajustes retroactivos de las agencias emisoras.
 
-El dataset contiene sesgos de cobertura de Wikipedia, prensa digital y fuentes financieras. La disponibilidad del texto no implica representatividad de la opinión pública. El muestreo semanal puede ocultar eventos de corta duración y las distintas frecuencias originales no eliminan la incertidumbre de fecha de publicación. No se deben inferir efectos causales solo a partir de correlaciones o pruebas de Granger.
+### 3.4. Biases and limitations
+El dataset contiene sesgos propios de la cobertura editorial de Wikipedia en inglés, la selección periodística de la prensa digital y la dinámica de los mercados financieros. La disponibilidad del texto no equivale a una muestra probabilística de la opinión pública global. 
 
-## Licencia y atribución
+Asimismo, el muestreo semanal puede suavizar eventos de impacto subsemanal. Las relaciones identificadas corresponden a correlaciones y precedencias temporales; no deben inferirse afirmaciones causales definitivas sin un diseño de identificación econométrico completo.
+
+### 3.5. Data Maintenance
+* **Alojamiento:** Repositorio en GitHub (`daaniii22/complex-data-analysis`) y Hugging Face Datasets (`miguel-mxrxra04/multimodal-climate-change-2008-2026`).
+* **Autores:** Daniel Moraleda Sánchez, Miguel Ángel Morera Hernández, Víctor Pastor López, David Santiago Ruiz y Juan Pablo Asenjo Seoanes (ETSISI - UPM).
+* **Ciclo de vida:** El dataset se mantiene congelado para la experimentación académica de la asignatura y es completamente reproducible mediante la ejecución del notebook `dataset_creation.ipynb`.
+
+## 4. License
 
 El código de este repositorio está bajo MIT. La redistribución del dataset debe respetar las licencias y términos de las fuentes:
 
@@ -89,22 +107,24 @@ El código de este repositorio está bajo MIT. La redistribución del dataset de
 
 La etiqueta `cc-by-sa-4.0` del front matter describe principalmente el contenido textual reutilizado; no sustituye las condiciones específicas de las demás fuentes.
 
-## Mantenimiento y citación
+## 5. Citation
 
 El dataset se congela para el trabajo académico y se puede regenerar ejecutando `dataset_creation.ipynb`. La fecha de descarga y las versiones de las fuentes deben registrarse cuando se publique una nueva versión en Hugging Face.
 
 ```bibtex
-@dataset{multimodal_climate_time_series,
-  author    = {Moraleda Sánchez, Daniel and Morera Hernández, Miguel Ángel and
-               Pastor López, Víctor and Santiago Ruiz, David and
+@dataset{multimodal_climate_time_series_2026,
+  author    = {Moraleda Sánchez, Daniel and 
+               Morera Hernández, Miguel Ángel and 
+               Pastor López, Víctor and 
+               Santiago Ruiz, David and 
                Asenjo Seoanes, Juan Pablo},
-  title     = {Multimodal Climate Time Series},
+  title     = {Multimodal Climate Time Series: Physical Signals, Media Coverage and Public Narrative (2008--2026)},
   year      = {2026},
   publisher = {Hugging Face},
-  url       = {https://huggingface.co/datasets/daaniii22/complex-data-analysis}
+  url       = {[https://huggingface.co/datasets/miguel-mxrxra04/multimodal-climate-change-2008-2026](https://huggingface.co/datasets/miguel-mxrxra04/multimodal-climate-change-2008-2026)}
 }
 ```
 
-## Agradecimientos
+## 6. Acknowledgements
 
-A las fuentes abiertas y a sus equipos de mantenimiento: Wikimedia Foundation, NOAA GML, NOAA CPC, NASA GISS, GDELT Project y Yahoo Finance, así como al equipo docente de la asignatura Descubrimiento de Conocimiento en Datos Complejos de la ETSISI, Universidad Politécnica de Madrid.
+Agradecimientos al equipo docente de la asignatura Descubrimiento de Conocimiento en Datos Complejos de la Escuela Técnica Superior de Ingeniería de Sistemas Informáticos (ETSISI - UPM), y a las iniciativas de datos abiertos de Wikimedia Foundation, NOAA Global Monitoring Laboratory, NOAA Climate Prediction Center, NASA Goddard Institute for Space Studies, GDELT Project y Yahoo Finance por posibilitar el acceso público a sus registros históricos.
