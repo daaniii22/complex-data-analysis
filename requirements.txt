@@ -1,7 +1,23 @@
-pandas>=2.0
-requests>=2.31
-yfinance>=0.2
-tqdm>=4.66
-matplotlib>=3.7
-pyarrow>=14.0
-pathlib>=1.0   
+# Instalación: pip install -r requirements.txt
+# Modelo de spacy (python -m spacy download en_core_web_sm)
+
+pandas==2.2.2
+numpy==1.26.4
+pyarrow==23.0.1
+datasets==3.6.0
+requests==2.32.3
+tqdm==4.66.5
+mwparserfromhell==0.7.2
+yfinance==1.7.0
+
+matplotlib==3.9.2
+seaborn==0.13.2
+
+scipy==1.15.3
+scikit-learn==1.9.0
+statsmodels==0.14.5
+
+torch==2.14.1
+transformers==4.47.0
+gensim==4.3.3
+spacy==3.8.2
