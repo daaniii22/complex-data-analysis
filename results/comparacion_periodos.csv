@@ -1,0 +1,5 @@
+periodo,n_meses,rev_media,rev_mediana,auge_multi_media,auge_multi_total,sent_media,T0_media,T3_media,T4_media
+2008–2012 (AR4 / SRREN-SREX),60,91.5,84.0,4.55,273,-0.215,0.128,0.333,0.147
+2013–2018 (Ciclo AR5 / SR1.5),72,28.7,21.5,1.39,100,-0.261,0.162,0.408,0.087
+2019–2022 (SRs + Ciclo AR6),48,95.8,66.0,8.21,394,-0.337,0.304,0.136,0.23
+2023–2026 (Post-AR6),45,29.3,24.0,1.09,49,-0.362,0.316,0.222,0.301

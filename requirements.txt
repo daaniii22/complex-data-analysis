@@ -1,5 +1,5 @@
 # Instalación: pip install -r requirements.txt
-# Modelo de spacy (python -m spacy download en_core_web_sm)
+# Modelo de spacy, versión usada: en_core_web_sm==3.8.0 (python -m spacy download en_core_web_sm)
 
 pandas==2.2.2
 numpy==1.26.4

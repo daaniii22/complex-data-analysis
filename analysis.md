@@ -1,7 +1,7 @@
 # **Análisis Temporal y Contraste de Hipótesis — Entrega 3**
 
 **Proyecto:** Evolución temporal del artículo de Wikipedia *Climate change* (2008–2026) y su relación con series climáticas, económicas y publicaciones del IPCC.  
-**Notebook:** [`3_temporal_analysis.ipynb`](3_temporal_analysis.ipynb)  
+**Notebook:** [`notebooks/3_temporal_analysis.ipynb`](notebooks/3_temporal_analysis.ipynb)  
 **Resultados (gráficos y tablas):** carpeta [`results/`](results/)
 
 ---
@@ -19,6 +19,25 @@ En la Entrega 2 dejamos pendientes dos comprobaciones que cerramos aquí (`resul
    - **Entrega 2 original (`11 informes`, 2013–2023):** ciclos AR5, SR1.5, SRCCL, SROCC y AR6 (`28` meses en ventana post-IPCC con $K = 3$).
    - **Ampliado 2011 con SREX SPM (`13 informes`):** suma **SRREN** (`2011-05-09`) y el resumen para responsables de políticas de **SREX** (`2011-11-18`), con `34` meses post-IPCC.
    - **Ampliado 2011 con SREX Completo (`13 informes`):** suma **SRREN** (`2011-05-09`) y la salida del informe completo de **SREX** (`2012-03-28`), también con `34` meses post-IPCC.
+
+**Informes del IPCC incluidos** (`results/eventos_ipcc_verificados.csv`):
+
+| Informe | Fecha | Escenario |
+|---|---|---|
+| AR5 — Grupo de trabajo I | `2013-09-27` | los 11 (E2 original) y los 13 |
+| AR5 — Grupo de trabajo II | `2014-03-31` | los 11 y los 13 |
+| AR5 — Grupo de trabajo III | `2014-04-12` | los 11 y los 13 |
+| AR5 — Informe de síntesis | `2014-11-02` | los 11 y los 13 |
+| SR1.5 — Calentamiento de 1,5 °C | `2018-10-08` | los 11 y los 13 |
+| SRCCL — Cambio climático y tierra | `2019-08-07` | los 11 y los 13 |
+| SROCC — Océano y criosfera | `2019-09-25` | los 11 y los 13 |
+| AR6 — Grupo de trabajo I | `2021-08-09` | los 11 y los 13 |
+| AR6 — Grupo de trabajo II | `2022-02-28` | los 11 y los 13 |
+| AR6 — Grupo de trabajo III | `2022-04-04` | los 11 y los 13 |
+| AR6 — Informe de síntesis | `2023-03-20` | los 11 y los 13 |
+| SRREN — Energías renovables | `2011-05-09` | solo los 13 (ambas variantes) |
+| SREX — Eventos extremos (SPM) | `2011-11-18` | solo los 13 con SREX SPM |
+| SREX — Eventos extremos (informe completo) | `2012-03-28` | solo los 13 con SREX Completo |
 
 ---
 
@@ -136,13 +155,13 @@ Como el texto permanece igual durante varias semanas o meses, `sent_medio` y `to
 | Serie | Horizonte | Modelo | MAE | RMSE |
 |---|---|---|---:|---:|
 | `revisiones_total` | 1-paso adelante | **SARIMA (0,1,1)×(1,0,0,12)** (`log1p`) | **15,1603** | **23,6397** |
-| `revisiones_total` | 1-paso adelante | RNN (LSTM PyTorch) | 18,2996 | 27,4533 |
+| `revisiones_total` | 1-paso adelante | RNN (LSTM PyTorch) | 18,8057 | 27,8937 |
 | `revisiones_total` | 1-paso adelante | Baseline Naive ($t-1$) | 21,2917 | 33,0221 |
 | `revisiones_total` | Multi-paso (24m) | Baseline Naive (último valor) | **15,7500** | **23,7785** |
 | `revisiones_total` | Multi-paso (24m) | SARIMA (0,1,1)×(1,0,0,12) (`log1p`) | 18,9588 | 25,0564 |
 | `revisiones_total` | Multi-paso (24m) | Suavizado Exponencial (SES) | 19,2607 | 25,2221 |
 | `revisiones_total` | Multi-paso (24m) | Suavizado Holt amortiguado | 19,4396 | 25,3032 |
-| `revisiones_total` | Multi-paso (24m) | RNN (LSTM PyTorch) | 27,3430 | 36,0920 |
+| `revisiones_total` | Multi-paso (24m) | RNN (LSTM PyTorch) | 28,2776 | 36,7328 |
 | `revisiones_total` | Multi-paso (24m) | Baseline Media histórica | 46,9619 | 48,3659 |
 | `sent_medio` | 1-paso adelante | Baseline Naive ($t-1$) | **0,0042** | 0,0082 |
 | `sent_medio` | 1-paso adelante | **SARIMA (1,0,0)** | 0,0043 | **0,0078** |
@@ -155,7 +174,7 @@ Como el texto permanece igual durante varias semanas o meses, `sent_medio` y `to
 | `terminos_en_auge_multi` | Multi-paso AR6 (48m) | Baseline Media entrenamiento | 5,5739 | 8,6457 |
 | `terminos_en_auge_multi` | Multi-paso AR6 (48m) | SARIMA (1,0,0) (sin exógena) | 5,5831 | 8,6828 |
 | `terminos_en_auge_multi` | Multi-paso AR6 (48m) | SARIMAX (1,0,0) `log1p` + `post_ipcc_11` | 4,7130 | 9,1179 |
-| `terminos_en_auge_multi` | Multi-paso AR6 (48m) | RNN (LSTM PyTorch) | 5,0384 | 9,3121 |
+| `terminos_en_auge_multi` | Multi-paso AR6 (48m) | RNN (LSTM PyTorch) | 4,9337 | 9,4875 |
 | `terminos_en_auge_multi` | Multi-paso AR6 (48m) | Suavizado Exponencial (SES) | 8,3412 | 9,5784 |
 | `terminos_en_auge_multi` | Multi-paso AR6 (48m) | Baseline Cero constante | **4,6458** | 9,7820 |
 
@@ -165,7 +184,7 @@ Como el texto permanece igual durante varias semanas o meses, `sent_medio` y `to
 ### **4.4. Anomalías y comparación de periodos**
 
 - **Figura 6:** [`results/06_deteccion_anomalias_y_regimenes.png`](results/06_deteccion_anomalias_y_regimenes.png) — Meses anómalos ($Z_{\text{MAD}} > 4{,}0$) dentro y fuera de las ventanas del IPCC y medias por periodo.
-- **Anomalías (`results/anomalias_detectadas.csv`):** encontramos **16 meses anómalos de 219 (`7,3 %`)**. Solo **5 (`31,2 %`)** están en ventanas de los 11 informes IPCC (`2021-10`, `2019-11`, `2014-12`, `2019-09`, `2022-05`); los otros **11 (`68,8 %`)** caen fuera, incluidos los tres mayores picos sin relación con el IPCC: `2020-09` (45 episodios, 301 rev.: `health, warm, result`), `2020-03` (43 episodios, 212 rev.: `impact, development, technology`) y `2021-01` (32 episodios, 221 rev.: `adaptation, risk, people`).
+- **Anomalías (`results/anomalias_detectadas.csv`):** encontramos **16 meses anómalos de 219 (`7,3 %`)**. Solo **5 (`31,2 %`)** están en ventanas de los 11 informes IPCC (`2021-10`, `2019-11`, `2014-12`, `2019-09`, `2022-05`); los otros **11 (`68,8 %`)** caen fuera, incluidos los dos mayores picos de toda la serie, sin relación con el IPCC: `2020-09` (45 episodios, 301 rev.: `health, warm, result`) y `2020-03` (43 episodios, 212 rev.: `impact, development, technology`). Otros picos fuera de las ventanas de los 11 informes son `2011-11` (37 episodios; solo cae en la ventana del escenario `13_spm` y se explica por citas del AR4, ver sección 5) y `2021-01` (32 episodios, 221 rev.: `adaptation, risk, people`).
 - **Periodos históricos (Kruskal-Wallis, `results/comparacion_periodos.csv`):** las cuatro etapas difieren claramente en `terminos_en_auge_multi` ($H = 40,26$, $p = 9,37 \times 10^{-9}$), `revisiones_total` ($H = 80,29$, $p = 2,66 \times 10^{-17}$) y `sent_medio` ($H = 98,52$, $p = 3,23 \times 10^{-21}$).
 
 | Periodo | Meses | Rev. media (med.) | Episodios/mes (total) | Sent. medio | T0 | T3 | T4 |
@@ -186,7 +205,7 @@ Aunque pasar al indicador multi-periodo (`terminos_en_auge_multi`) recupera 222 
 1. **Los tests no salen significativos ni en el calendario base ni con SREX Completo:** la permutación circular da `p = 0,1324` (11 informes) y `p = 0,1142` (13 informes con SREX Completo), igual que SARIMAX sin controles (`p = 0,0978` en niveles; `p = 0,1372` en `log1p`). El volumen de revisiones tampoco cambia tras los informes (`p = 0,7872`).
 2. **El único escenario significativo (`13_spm`, `p = 0,0137`) es una coincidencia de fechas:** ese resultado depende de meter `2011-11` (37 episodios) en la ventana del SREX SPM (`2011-11-18`). Al mirar `dataset_clean.parquet`, comprobamos que los cambios de noviembre de 2011 arrancaron el **`2011-11-06` y el `2011-11-13` (hasta 12 días antes del SREX)** y las palabras en auge (`synthesis`, `section`, `uncertainty`, `projections`, `chap`, `meehl`) corresponden a citas del **AR4 (2007)**, no del SREX.
 3. **No mejora la predicción fuera de muestra:** en el ciclo AR6 (`2021–2024`), incluir `post_ipcc_11` en `SARIMAX(1,0,0)` apenas baja el RMSE un `1,3 %` respecto a `SARIMA(1,0,0)` sin exógena (`8,5734` vs. `8,6828`) y no mejora el MAE (`5,6025` vs. `5,5831`).
-4. **Matiz importante:** sí vemos respuestas concretas al mes siguiente ($\tau = +1$) de algunos informes, sobre todo `SROCC 2019` (`acidification, ocean`) y `AR6 WGI 2021` (`adapt, forest, action`), y al controlar por `log_rev` en `log1p` el coeficiente de `post_ipcc_11` roza el 5 % (`p = 0,0432`). Sin embargo, casi siete de cada diez meses anómalos (`68,8 %`) —y los mayores picos de toda la serie (`2020-09`, `2020-03`, `2021-01`)— se deben a **reescrituras internas de Wikipedia**, no a las fechas del IPCC.
+4. **Matiz importante:** sí vemos respuestas concretas al mes siguiente ($\tau = +1$) de algunos informes, sobre todo `SROCC 2019` (`acidification, ocean`) y `AR6 WGI 2021` (`adapt, forest, action`), y al controlar por `log_rev` en `log1p` el coeficiente de `post_ipcc_11` solo llega a ser significativo al 5 % en `log1p` (`p = 0,0432`; en niveles, `p = 0,0555`). Sin embargo, casi siete de cada diez meses anómalos (`68,8 %`) —y los dos mayores picos de toda la serie (`2020-09` y `2020-03`)— se deben a **reescrituras internas de Wikipedia**, no a las fechas del IPCC.
 
 ---
 

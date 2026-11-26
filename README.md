@@ -24,6 +24,8 @@ Las columnas de texto y fecha están en inglés para facilitar la interoperabili
 python3 -m pip install -r requirements.txt
 ```
 
+**Requisitos de entorno:** se necesita **Python 3.11 o superior** (las versiones fijadas en `requirements.txt` se probaron con Python 3.12; por ejemplo, `scikit-learn==1.9.0` no está disponible para Python 3.10). Además, hay que descargar el modelo de spaCy una vez: `python -m spacy download en_core_web_sm` (versión usada: 3.8.0).
+
 Abre `dataset_creation.ipynb` y ejecuta las celdas en orden. El pipeline usa APIs públicas y puede tardar, especialmente al recuperar las revisiones de Wikipedia. Al finalizar genera:
 
 ```text

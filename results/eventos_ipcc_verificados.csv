@@ -1,0 +1,15 @@
+informe,fecha,grupo,verificada_oficial,mes
+SRREN - Energías renovables (Especial),2011-05-09,especial_2011,True,2011-05
+SREX - Eventos extremos (SPM nov. 2011),2011-11-18,especial_2011,True,2011-11
+SREX - Eventos extremos (Completo mar. 12),2012-03-28,srex_full,True,2012-03
+AR5 - Grupo de trabajo I,2013-09-27,base_e2,True,2013-09
+AR5 - Grupo de trabajo II,2014-03-31,base_e2,True,2014-03
+AR5 - Grupo de trabajo III,2014-04-12,base_e2,True,2014-04
+AR5 - Informe de síntesis,2014-11-02,base_e2,True,2014-11
+"SR1.5 - Calentamiento de 1,5 °C",2018-10-08,base_e2,True,2018-10
+SRCCL - Cambio climático y tierra,2019-08-07,base_e2,True,2019-08
+SROCC - Océano y criosfera,2019-09-25,base_e2,True,2019-09
+AR6 - Grupo de trabajo I,2021-08-09,base_e2,True,2021-08
+AR6 - Grupo de trabajo II,2022-02-28,base_e2,True,2022-02
+AR6 - Grupo de trabajo III,2022-04-04,base_e2,True,2022-04
+AR6 - Informe de síntesis,2023-03-20,base_e2,True,2023-03

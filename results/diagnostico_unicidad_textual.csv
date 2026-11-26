@@ -1,0 +1,9 @@
+metrica,valor
+Total de semanas observadas,978
+Textos limpios únicos (text_id distintos),376 (38.45 %)
+Semanas con cambio textual (texto_nuevo=True),380 (38.85 %)
+Semanas sin cambio textual (texto_nuevo=False),598 (61.15 %)
+Meses sin ningún cambio textual real,44 de 225 (19.56 %)
+Duración de rachas con texto idéntico — media,2.57 semanas
+Duración de rachas con texto idéntico — mediana,1.0 semanas
+Duración de rachas con texto idéntico — P75 / P90 / máx.,3.0 / 6.0 / 24 semanas

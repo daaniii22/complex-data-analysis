@@ -1,0 +1,29 @@
+serie,modo,modelo,MAE,RMSE
+revisiones_total,Multi-paso (24m),"SARIMA (0, 1, 1)x(1, 0, 0, 12)",18.9588,25.0564
+revisiones_total,Multi-paso (24m),Suavizado Exponencial (SES),19.2607,25.2221
+revisiones_total,Multi-paso (24m),Suavizado Holt amortiguado,19.4396,25.3032
+revisiones_total,Multi-paso (24m),RNN (LSTM PyTorch),28.2776,36.7328
+revisiones_total,Multi-paso (24m),Baseline Naive (último valor),15.75,23.7785
+revisiones_total,Multi-paso (24m),Baseline Naive estacional (12m),34.5,51.4871
+revisiones_total,Multi-paso (24m),Baseline Media histórica,46.9619,48.3659
+revisiones_total,1-paso adelante,"SARIMA (0, 1, 1)x(1, 0, 0, 12)",15.1603,23.6397
+revisiones_total,1-paso adelante,RNN (LSTM PyTorch),18.8057,27.8937
+revisiones_total,1-paso adelante,Baseline Naive (t-1),21.2917,33.0221
+sent_medio,Multi-paso (24m),"SARIMA (1, 0, 0)x(0, 0, 0, 0)",0.0206,0.0228
+sent_medio,Multi-paso (24m),Suavizado Exponencial (SES),0.0415,0.0435
+sent_medio,Multi-paso (24m),Suavizado Holt amortiguado,0.046,0.0484
+sent_medio,Multi-paso (24m),RNN (LSTM PyTorch),0.0288,0.0303
+sent_medio,Multi-paso (24m),Baseline Naive (último valor),0.0415,0.0435
+sent_medio,Multi-paso (24m),Baseline Naive estacional (12m),0.0493,0.053
+sent_medio,Multi-paso (24m),Baseline Media histórica,0.053,0.0553
+sent_medio,1-paso adelante,"SARIMA (1, 0, 0)x(0, 0, 0, 0)",0.0043,0.0078
+sent_medio,1-paso adelante,RNN (LSTM PyTorch),0.0046,0.0081
+sent_medio,1-paso adelante,Baseline Naive (t-1),0.0042,0.0082
+terminos_en_auge_multi,Multi-paso (2021-2024),"SARIMAX (1,0,0) + post_ipcc_13_spm",5.5707,8.5512
+terminos_en_auge_multi,Multi-paso (2021-2024),"SARIMAX (1,0,0) + post_ipcc_11",5.6025,8.5734
+terminos_en_auge_multi,Multi-paso (2021-2024),Baseline Media entrenamiento,5.5739,8.6457
+terminos_en_auge_multi,Multi-paso (2021-2024),"SARIMA (1,0,0)",5.5831,8.6828
+terminos_en_auge_multi,Multi-paso (2021-2024),"SARIMAX (1,0,0) log1p + post_ipcc_11",4.713,9.1179
+terminos_en_auge_multi,Multi-paso (2021-2024),RNN (LSTM PyTorch),4.9337,9.4875
+terminos_en_auge_multi,Multi-paso (2021-2024),Suavizado Exponencial (SES),8.3412,9.5784
+terminos_en_auge_multi,Multi-paso (2021-2024),Baseline Cero constante,4.6458,9.782

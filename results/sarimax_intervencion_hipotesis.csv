@@ -1,0 +1,20 @@
+serie_objetivo,modelo,beta_post_ipcc,p_post_ipcc,beta_log_rev,p_log_rev,AIC,BIC,LB_res_p_lag12
+terminos_en_auge_multi,"Multi | Solo ARMA(1,0,0) (sin exógena)",,,,,1503.63,1513.79,0.0049
+terminos_en_auge_multi,"Multi | SARIMAX(1,0,0) + post_ipcc_11 (E2)",2.7564,0.0978,,,1503.12,1516.67,0.0055
+terminos_en_auge_multi,"Multi | SARIMAX(1,0,0) + post_ipcc_11 + log_rev",2.6025,0.0555,3.4692,0.0,1465.67,1482.62,0.1219
+terminos_en_auge_multi,"Multi | SARIMAX(1,0,0) + post_ipcc_13_spm",4.262,0.001,,,1498.39,1511.95,0.0053
+terminos_en_auge_multi,"Multi | SARIMAX(1,0,0) + post_ipcc_13_full",2.6554,0.0962,,,1502.85,1516.41,0.0138
+log_auge_multi,"Multi log1p | Solo ARMA(1,0,0)",,,,,638.0,648.17,0.0069
+log_auge_multi,"Multi log1p | SARIMAX(1,0,0) + post_ipcc_11",0.3437,0.1372,,,638.18,651.73,0.0074
+log_auge_multi,"Multi log1p | SARIMAX(1,0,0) + post_ipcc_11 + log_rev",0.3561,0.0432,0.575,0.0,587.54,604.49,0.8278
+log_auge_multi,"Multi log1p | SARIMAX(1,0,0) + post_ipcc_13_spm",0.5234,0.0124,,,634.97,648.53,0.0074
+log_auge_multi,"Multi log1p | SARIMAX(1,0,0) + post_ipcc_13_full",0.3534,0.1056,,,637.69,651.25,0.014
+terminos_en_auge_e2,"E2 orig | SARIMAX(1,0,0) + post_ipcc_11",1.7414,0.1923,,,1378.09,1391.64,0.0092
+terminos_en_auge_e2,"E2 orig | SARIMAX(1,0,0) + post_ipcc_13_spm",3.1488,0.0016,,,1372.82,1386.38,0.008
+terminos_en_auge_e2,"E2 orig | SARIMAX(1,0,0) + post_ipcc_13_full",1.7967,0.1519,,,1377.61,1391.16,0.0198
+log_auge_e2,"E2 log1p | SARIMAX(1,0,0) + post_ipcc_11",0.3043,0.1489,,,590.53,604.09,0.0043
+log_auge_e2,"E2 log1p | SARIMAX(1,0,0) + post_ipcc_13_spm",0.4978,0.0068,,,586.63,600.18,0.0036
+log_auge_e2,"E2 log1p | SARIMAX(1,0,0) + post_ipcc_13_full",0.3253,0.0996,,,589.88,603.43,0.0087
+log_rev,"Volumen | Solo ARMA(1,0,1) sobre log1p(revisiones)",,,,,504.04,517.6,0.7416
+log_rev,"Volumen | SARIMAX(1,0,1) log1p(rev) + post_ipcc_11",0.0459,0.7872,,,505.97,522.92,0.7268
+log_rev,"Volumen | SARIMAX(1,0,1) log1p(rev) + post_ipcc_13_spm",0.1401,0.3737,,,505.21,522.16,0.6933
